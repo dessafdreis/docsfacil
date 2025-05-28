@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DocsFácil - Declaração de Residência</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f9fc;
+      margin: 0; padding: 0;
+      display: flex; justify-content: center; align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 25px 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+      max-width: 550px;
+      width: 100%;
+    }
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      color: #34495e;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px 8px;
+      margin-top: 6px;
+      border: 1px solid #bdc3c7;
+      border-radius: 6px;
+      font-size: 15px;
+      transition: border-color 0.3s;
+    }
+    input:focus, select:focus {
+      border-color: #2980b9;
+      outline: none;
+    }
+    button {
+      margin-top: 25px;
+      width: 100%;
+      background: #2980b9;
+      color: white;
+      font-size: 18px;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background: #1c5980;
+    }
+    #resultado {
+      margin-top: 30px;
+      background: #ecf0f1;
+      padding: 15px 20px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      font-family: monospace;
+      font-size: 14px;
+      color: #2c3e50;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>DocsFácil - Declaração de Residência</h1>
+    <form id="form-declaracao">
+      <label for="nome">Nome Completo:</label>
+      <input type="text" id="nome" required />
+
+      <label for="dataNascimento">Data de Nascimento:</label>
+      <input type="date" id="dataNascimento" required />
+
+      <label for="estadoCivil">Estado Civil:</label>
+      <select id="estadoCivil" required>
+        <option value="">Selecione...</option>
+        <option>Solteiro(a)</option>
+        <option>Casado(a)</option>
+        <option>Divorciado(a)</option>
+        <option>Viúvo(a)</option>
+      </select>
+
+      <label for="rg">RG:</label>
+      <input type="text" id="rg" required />
+
+      <label for="cpf">CPF:</label>
+      <input type="text" id="cpf" required />
+
+      <label for="endereco">Endereço:</label>
+      <input type="text" id="endereco" placeholder="Rua, número, complemento" required />
+
+      <label for="bairro">Bairro:</label>
+      <input type="text" id="bairro" required />
+
+      <label for="cidade">Cidade:</label>
+      <input type="text" id="cidade" required />
+
+      <label for="cep">CEP:</label>
+      <input type="text" id="cep" required />
+
+      <label for="dataDeclaracao">Data da Declaração:</label>
+      <input type="date" id="dataDeclaracao" required />
+
+      <button type="submit">Gerar Declaração</button>
+    </form>
+
+    <pre id="resultado" style="display:none;"></pre>
+  </div>
+
+  <script>
+    const form = document.getElementById('form-declaracao');
+    const resultado = document.getElementById('resultado');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const nome = document.getElementById('nome').value.trim().toUpperCase();
+      const dataNascimento = new Date(document.getElementById('dataNascimento').value);
+      const estadoCivil = document.getElementById('estadoCivil').value;
+      const rg = document.getElementById('rg').value.trim();
+      const cpf = document.getElementById('cpf').value.trim();
+      const endereco = document.getElementById('endereco').value.trim().toUpperCase();
+      const bairro = document.getElementById('bairro').value.trim().toUpperCase();
+      const cidade = document.getElementById('cidade').value.trim().toUpperCase();
+      const cep = document.getElementById('cep').value.trim();
+      const dataDeclaracao = new Date(document.getElementById('dataDeclaracao').value);
+
+      // Formatar datas para DD/MM/AAAA
+      const formatData = (d) => {
+        if (!d || isNaN(d)) return '';
+        const dia = ("0" + d.getDate()).slice(-2);
+        const mes = ("0" + (d.getMonth() + 1)).slice(-2);
+        const ano = d.getFullYear();
+        return `${dia}/${mes}/${ano}`;
+      };
+
+      const texto = 
+`ASSOCIAÇÃO MIGUEL DE OLIVEIRA E AMIGOS DO BAIRRO VILAR CARIOCA
+RUA CEM, S/Nº - VILAR CARIOCA - INHOAÍBA - CEP: 23057-148 - RIO DE JANEIRO
+CNPJ: 19.287.638/0001-83 - TELEFONE: (21)967510760 / (21)21964316450 ZAP
+
+DECLARAÇÃO DE RESIDÊNCIA
+
+Eu THIAGO SANTOS DA CUNHA, na condição de Presidente da ASSOCIAÇÃO MIGUEL DE OLIVEIRA E AMIGOS DO BAIRRO VILAR CARIOCA - AMAVIC, registrada no CNPJ Nº 19.287.638/0001-83, declaro para os devidos fins que o(a) Senhor(a):
+
+${nome}, DN: ${formatData(dataNascimento)}, ${estadoCivil}, portador(a) dos documentos RG Nº: ${rg} e CPF Nº: ${cpf}, é integrante desta associação e residente no endereço abaixo:
+
+ENDEREÇO: ${endereco}
+BAIRRO: ${bairro}
+CIDADE: ${cidade}
+CEP: ${cep}
+
+OBS: As informações prestadas acima são baseadas na declaração feita pelo residente e morador. O mesmo está ciente que, caso algumas dessas informações não sejam fidedignas, sofrerá sanções, de acordo com Art. 299 DO CÓDIGO PENAL – DECRETO LEI 2848/40.
+
+Rio de Janeiro, ${formatData(dataDeclaracao)}
+
+Sem mais para o momento,
+
+__________________________
+Assinatura: ${nome}
+
+VALIDADE DE 90 DIAS
+`;
+
+      resultado.textContent = texto;
+      resultado.style.display = 'block';
+
+      // Scroll até resultado
+      resultado.scrollIntoView({behavior: 'smooth'});
+    });
+  </script>
+</body>
+</html>
